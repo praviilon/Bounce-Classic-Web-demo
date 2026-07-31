@@ -1,7 +1,9 @@
-# Bounce Classic Web — демо
+# Bounce Classic Web Demo
 
 Демонстрационная версия браузерной игры в стиле классической **Bounce**
 с телефонов Nokia.
+
+- [Ссылка на Демо](https://praviilon.github.io/Bounce-Classic-Web-demo/)
 
 ## Описание
 
