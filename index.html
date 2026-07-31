@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bounce Classic Web — демо</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="phone">
+  <div class="phone-earpiece"></div>
+  <div class="phone-brand">BOUNCE&nbsp;CLASSIC</div>
+
+  <div class="phone-screen-frame">
+    <div class="status-bar">
+      <span class="status-signal">▂▄▆█</span>
+      <span class="status-clock" id="statusClock">12:00</span>
+      <span class="status-battery">▮▮▮▮</span>
+    </div>
+
+    <div class="screen" id="screen">
+      <canvas id="game-canvas" width="400" height="300"></canvas>
+
+      <!-- HUD -->
+      <div id="hud" class="hud hidden">
+        <div class="hud-left">
+          <span class="hud-icon">◎</span><span id="hudRings">0/0</span>
+        </div>
+        <div class="hud-center" id="hudTimer">00:00</div>
+        <div class="hud-right">
+          <span id="hudBallState" class="hud-ball-icon">●</span>
+          <span id="hudLives">●●●</span>
+        </div>
+      </div>
+
+      <!-- Главное меню -->
+      <div id="menu" class="overlay">
+        <div class="overlay-title">BOUNCE<br>CLASSIC WEB</div>
+        <ul class="menu-list" id="menuList">
+          <li data-action="play" class="selected">&gt; ИГРАТЬ</li>
+          <li data-action="howto">&nbsp;&nbsp;УПРАВЛЕНИЕ</li>
+          <li data-action="settings">&nbsp;&nbsp;НАСТРОЙКИ</li>
+          <li data-action="about">&nbsp;&nbsp;ОБ ИГРЕ</li>
+        </ul>
+        <div class="overlay-hint">↑↓ выбор · Enter подтвердить</div>
+      </div>
+
+      <!-- Экран управления -->
+      <div id="howto" class="overlay hidden">
+        <div class="overlay-title">УПРАВЛЕНИЕ</div>
+        <div class="overlay-text">
+          ← / → — движение<br>
+          ↑ — прыжок<br>
+          ↓ — погасить прыжок / отскок<br>
+          R — рестарт уровня<br>
+          Esc / P — пауза<br><br>
+          Размер шарика меняют только<br>
+          НАСОСЫ на уровне:<br>
+          синий (↑) — надуть<br>
+          оранжевый (↓) — сдуть
+        </div>
+        <div class="overlay-hint">Enter / Esc — назад</div>
+      </div>
+
+      <!-- Настройки -->
+      <div id="settings" class="overlay hidden">
+        <div class="overlay-title">НАСТРОЙКИ</div>
+        <div class="settings-row">
+          <span>МУЗЫКА</span>
+          <input type="range" id="musicVol" min="0" max="100" value="60">
+        </div>
+        <div class="settings-row">
+          <span>ЗВУКИ</span>
+          <input type="range" id="sfxVol" min="0" max="100" value="80">
+        </div>
+        <div class="overlay-hint">Esc — назад</div>
+      </div>
+
+      <!-- Об игре -->
+      <div id="about" class="overlay hidden">
+        <div class="overlay-title">ОБ ИГРЕ</div>
+        <div class="overlay-text">
+          Bounce Classic Web<br>
+          демо-версия 1.0<br><br>
+          Дань уважения классике<br>
+          Bounce с телефонов Nokia.<br><br>
+          Сделано на HTML5 Canvas.
+        </div>
+        <div class="overlay-hint">Enter / Esc — назад</div>
+      </div>
+
+      <!-- Пауза -->
+      <div id="pause" class="overlay hidden">
+        <div class="overlay-title">ПАУЗА</div>
+        <ul class="menu-list" id="pauseList">
+          <li data-action="resume" class="selected">&gt; ПРОДОЛЖИТЬ</li>
+          <li data-action="restart">&nbsp;&nbsp;РЕСТАРТ</li>
+          <li data-action="menu">&nbsp;&nbsp;В МЕНЮ</li>
+        </ul>
+      </div>
+
+      <!-- Завершение уровня -->
+      <div id="levelComplete" class="overlay hidden">
+        <div class="overlay-title">УРОВЕНЬ<br>ПРОЙДЕН!</div>
+        <div class="overlay-text" id="resultsText"></div>
+        <div class="overlay-rating" id="resultsRating">S</div>
+        <ul class="menu-list" id="completeList">
+          <li data-action="restart" class="selected">&gt; ИГРАТЬ СНОВА</li>
+          <li data-action="menu">&nbsp;&nbsp;В МЕНЮ</li>
+        </ul>
+      </div>
+
+      <!-- Game Over -->
+      <div id="gameOver" class="overlay hidden">
+        <div class="overlay-title">GAME OVER</div>
+        <div class="overlay-text">Жизни закончились</div>
+        <ul class="menu-list" id="gameOverList">
+          <li data-action="restart" class="selected">&gt; ПОПРОБОВАТЬ СНОВА</li>
+          <li data-action="menu">&nbsp;&nbsp;В МЕНЮ</li>
+        </ul>
+      </div>
+
+      <div class="scanlines"></div>
+    </div>
+  </div>
+
+  <div class="phone-keys">
+    <div class="dpad">
+      <button class="key key-up" data-key="ArrowUp">▲</button>
+      <div class="dpad-mid">
+        <button class="key key-left" data-key="ArrowLeft">◀</button>
+        <button class="key key-center" data-key="Enter">●</button>
+        <button class="key key-right" data-key="ArrowRight">▶</button>
+      </div>
+      <button class="key key-down" data-key="ArrowDown">▼</button>
+    </div>
+  </div>
+</div>
+
+<p class="footer-note">Bounce Classic Web — демо. Управление только с клавиатуры ПК (стрелки, Enter, Esc, R, P).</p>
+
+<script src="js/audio.js"></script>
+<script src="js/input.js"></script>
+<script src="js/save.js"></script>
+<script src="js/physics.js"></script>
+<script src="js/ball.js"></script>
+<script src="js/level.js"></script>
+<script src="js/game.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
